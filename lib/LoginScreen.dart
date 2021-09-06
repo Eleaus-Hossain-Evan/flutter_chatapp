@@ -10,7 +10,6 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-
 TextEditingController _email = TextEditingController();
 TextEditingController _password = TextEditingController();
 bool isLoading = false;
@@ -30,72 +29,66 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             )
           : SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: size.height / 20,
-                  ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      width: size.width / 1.2,
-                      child: IconButton(
-                          icon: Icon(Icons.arrow_back_ios), onPressed: () {})),
-                  SizedBox(
-                    height: size.height / 40,
-                  ),
-                  Container(
-                      width: size.width / 1.3,
-                      child: Text(
-                        "Welcome",
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                  Container(
-                      width: size.width / 1.3,
-                      child: Text(
-                        "Sign In To Continue!",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                  SizedBox(
-                    height: size.height / 10,
-                  ),
-                  Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: field(size, "Email", Icons.account_box, _email)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    child: Container(
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: size.height / 20,
+                    ),
+                    Container(
+                        width: size.width / 1.3,
+                        child: Text(
+                          "Welcome",
+                          style: TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                    Container(
+                        width: size.width / 1.3,
+                        child: Text(
+                          "Sign In To Continue!",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )),
+                    SizedBox(
+                      height: size.height / 10,
+                    ),
+                    Container(
                         width: size.width,
                         alignment: Alignment.center,
-                        child: field(size, "Password", Icons.lock, _password)),
-                  ),
-                  SizedBox(
-                    height: size.height / 10,
-                  ),
-                  customButton(context, size, "Login"),
-                  SizedBox(
-                    height: size.height / 40,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => CreateAccount())),
-                    child: Text(
-                      "Create Account",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                        child: field(size, "Email", Icons.account_box, _email)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      child: Container(
+                          width: size.width,
+                          alignment: Alignment.center,
+                          child: field(size, "Password", Icons.lock, _password)),
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: size.height / 10,
+                    ),
+                    customButton(context, size, "Login"),
+                    SizedBox(
+                      height: size.height / 40,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pushAndRemoveUntil(
+                          context, MaterialPageRoute(builder: (_) => CreateAccount()), (route) => false),
+                      child: Text(
+                        "Create Account",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
     );
@@ -103,15 +96,16 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 Widget customButton(BuildContext context, Size size, String label) {
+  final _services = Services();
   return GestureDetector(
     onTap: () {
       if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
         isLoading = true;
-        login(_email.text, _password.text).then((user) {
+        _services.login(_email.text, _password.text).then((user) {
           if (user != null) {
             isLoading = false;
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => HomeScreen()));
+            Navigator.pushAndRemoveUntil(
+                context, MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
             print("login Sucessfull");
           } else {
             print("Login Failed");

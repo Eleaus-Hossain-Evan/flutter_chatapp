@@ -30,79 +30,73 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
             )
           : SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: size.height / 20,
-                  ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      width: size.width / 1.2,
-                      child: IconButton(
-                          icon: Icon(Icons.arrow_back_ios), onPressed: () {})),
-                  SizedBox(
-                    height: size.height / 20,
-                  ),
-                  Container(
-                      width: size.width / 1.3,
-                      child: Text(
-                        "Welcome",
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                  Container(
-                      width: size.width / 1.3,
-                      child: Text(
-                        "Register To Continue!",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                  SizedBox(
-                    height: size.height / 10,
-                  ),
-                  Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: field(size, "Name", Icons.person, _name)),
-                  SizedBox(
-                    height: size.height / 40,
-                  ),
-                  Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: field(size, "Email", Icons.account_box, _email)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    child: Container(
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: size.height / 20,
+                    ),
+                    Container(
+                        width: size.width / 1.3,
+                        child: Text(
+                          "Welcome",
+                          style: TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                    Container(
+                        width: size.width / 1.3,
+                        child: Text(
+                          "Sign Up To Continue!",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )),
+                    SizedBox(
+                      height: size.height / 10,
+                    ),
+                    Container(
                         width: size.width,
                         alignment: Alignment.center,
-                        child: field(size, "Password", Icons.lock, _password)),
-                  ),
-                  SizedBox(
-                    height: size.height / 10,
-                  ),
-                  customButton(context, size, "Register"),
-                  SizedBox(
-                    height: size.height / 40,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => LoginScreen())),
-                    child: Text(
-                      "LOG IN",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                        child: field(size, "Name", Icons.person, _name)),
+                    SizedBox(
+                      height: size.height / 40,
                     ),
-                  )
-                ],
+                    Container(
+                        width: size.width,
+                        alignment: Alignment.center,
+                        child: field(size, "Email", Icons.account_box, _email)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      child: Container(
+                          width: size.width,
+                          alignment: Alignment.center,
+                          child: field(size, "Password", Icons.lock, _password)),
+                    ),
+                    SizedBox(
+                      height: size.height / 10,
+                    ),
+                    customButton(context, size, "Register"),
+                    SizedBox(
+                      height: size.height / 40,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pushAndRemoveUntil(
+                          context, MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false),
+                      child: Text(
+                        "LOG IN",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
     );
@@ -110,17 +104,18 @@ class _CreateAccountState extends State<CreateAccount> {
 }
 
 Widget customButton(BuildContext context, Size size, String label) {
+  final _services = Services();
   return GestureDetector(
     onTap: () {
       if (_name.text.isNotEmpty &&
           _email.text.isNotEmpty &&
           _password.text.isNotEmpty) {
         isLoading = true;
-        createAccount(_name.text, _email.text, _password.text).then((user) {
+        _services.createAccount(_name.text, _email.text, _password.text).then((user) {
           if (user != null) {
             isLoading = false;
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => HomeScreen()));
+            Navigator.pushAndRemoveUntil(
+                context, MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
             print("Account Created Sucessfully");
           } else {
             print("Account Creation Failed");

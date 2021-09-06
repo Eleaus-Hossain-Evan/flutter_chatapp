@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/HomeScreen.dart';
 import 'package:flutter_chatapp/LoginScreen.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   @override
