@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: camel_case_types
 class messageBubble extends StatelessWidget {
   final String message;
   final bool isMe;
