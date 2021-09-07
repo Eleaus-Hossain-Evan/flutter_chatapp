@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/LoginScreen.dart';
-import 'package:flutter_chatapp/ModelUser.dart';
+import 'package:flutter_chatapp/Model.dart';
 
-class Services{
+class Services {
   auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -14,23 +14,23 @@ class Services{
     if (user == null) {
       return null;
     }
-    return ModelUser(user.uid, user.displayName.toString(), user.email.toString());
+    return ModelUser(
+        user.uid, user.displayName.toString(), user.email.toString());
   }
 
-  Future<ModelUser?> createAccount(String name, String email, String password) async {
+  Future<ModelUser?> createAccount(
+      String name, String email, String password) async {
     try {
       User? user = (await _auth.createUserWithEmailAndPassword(
-          email: email, password: password))
+              email: email, password: password))
           .user;
-      if(user != null){
+      if (user != null) {
         await _firestore.collection("users").doc(_auth.currentUser!.uid).set({
           "displayName": name,
           "email": user.email,
           "status": "Unavailable",
           "uid": _auth.currentUser!.uid,
-        }).then((value) => {
-          print("-------Firestore : ${user.uid}---------")
-        });
+        }).then((value) => {print("-------Firestore : ${user.uid}---------")});
         print([user]);
       }
       if (user != null) {
@@ -40,7 +40,6 @@ class Services{
         print("Account creation failed");
         return firebaseUser(user);
       }
-
     } catch (e) {
       print(e);
       return null;
@@ -50,7 +49,7 @@ class Services{
   Future<ModelUser?> login(String email, String password) async {
     try {
       User? user = (await _auth.signInWithEmailAndPassword(
-          email: email, password: password))
+              email: email, password: password))
           .user;
 
       if (user != null) {
@@ -77,5 +76,4 @@ class Services{
       return null;
     }
   }
-
 }
