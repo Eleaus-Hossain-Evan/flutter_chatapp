@@ -25,11 +25,13 @@ class _MessageState extends State<Message> {
             reverse: true,
             itemCount: chatDoc.length,
             itemBuilder: (context, index) => messageBubble(
-                chatDoc[index]['text'],
-                chatDoc[index]['displayName'],
-                chatDoc[index]['email'],
-                chatDoc[index]['uid'] == currentUser,
-                key: ValueKey(chatDoc[index].id)));
+                  chatDoc[index]['text'],
+                  chatDoc[index]['displayName'],
+                  chatDoc[index]['email'],
+                  chatDoc[index]['uid'] == currentUser,
+                  key: ValueKey(chatDoc[index].id),
+                  time: chatDoc[index]['time'].toDate(),
+                ));
       },
     );
   }

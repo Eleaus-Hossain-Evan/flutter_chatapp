@@ -12,22 +12,24 @@ class _NewMessageState extends State<NewMessage> {
   var msg = "";
 
   void sendMessage() async {
-    final userinfo = FirebaseAuth.instance.currentUser!.uid;
+    if (messageController.text.isNotEmpty) {
+      final userinfo = FirebaseAuth.instance.currentUser!.uid;
 
-    final userData = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(userinfo)
-        .get();
+      final userData = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userinfo)
+          .get();
 
-    await FirebaseFirestore.instance.collection("chats").doc().set({
-      "text": messageController.text.trim(),
-      "uid": userData['uid'],
-      "displayName": userData['displayName'],
-      "email": userData['email'],
-      "time": Timestamp.now(),
-    });
+      await FirebaseFirestore.instance.collection("chats").doc().set({
+        "text": messageController.text.trim(),
+        "uid": userData['uid'],
+        "displayName": userData['displayName'],
+        "email": userData['email'],
+        "time": Timestamp.now(),
+      });
 
-    messageController.clear();
+      messageController.clear();
+    }
   }
 
   @override

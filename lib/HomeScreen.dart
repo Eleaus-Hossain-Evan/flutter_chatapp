@@ -43,7 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Message(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Message(),
+              ),
             ),
             NewMessage(),
           ],
