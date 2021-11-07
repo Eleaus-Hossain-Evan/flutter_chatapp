@@ -19,19 +19,26 @@ class _MessageState extends State<Message> {
           .orderBy("time", descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        var chatDoc = snapshot.data!.docs;
+        if (snapshot.hasData) {
+          var chatDoc = snapshot.data!.docs;
 
-        return ListView.builder(
+          return ListView.builder(
             reverse: true,
             itemCount: chatDoc.length,
             itemBuilder: (context, index) => messageBubble(
-                  chatDoc[index]['text'],
-                  chatDoc[index]['displayName'],
-                  chatDoc[index]['email'],
-                  chatDoc[index]['uid'] == currentUser,
-                  key: ValueKey(chatDoc[index].id),
-                  time: chatDoc[index]['time'].toDate(),
-                ));
+              chatDoc[index]['text'],
+              chatDoc[index]['displayName'],
+              chatDoc[index]['email'],
+              chatDoc[index]['uid'] == currentUser,
+              key: ValueKey(chatDoc[index].id),
+              time: chatDoc[index]['time'].toDate(),
+            ),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
     );
   }

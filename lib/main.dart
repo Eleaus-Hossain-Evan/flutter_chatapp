@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chatapp/HomeScreen.dart';
-import 'package:flutter_chatapp/LoginScreen.dart';
+import 'package:flutter_chatapp/screens/LoginScreen.dart';
+import 'package:flutter_chatapp/screens/searchScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
               if (user == null) {
                 return LoginScreen();
               } else {
-                return HomeScreen();
+                return Search();
               }
             }
             return Scaffold(
